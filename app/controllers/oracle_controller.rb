@@ -12,7 +12,9 @@ class OracleController < ApplicationController
   end
 
   def payment_data_by_acct_num
-    data = {id: 1, acct_num: "5#{@faker_number.number(6)}", active: true}
-    render json: data.to_json
+    OraclePaymentData.delete_all
+    OraclePaymentData.create!(acct_num: params[:acct_num], active: true, id: @faker_number.number(4))
+    data = OraclePaymentData.where(acct_num: params[:acct_num]).first
+    render json: {body: {acct_num: data[:acct_num], active: data[:active], id: data[:id]}}
   end
 end
